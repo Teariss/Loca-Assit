@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocaAssist — On trouve le logement. Vous emménagez.</title>
+  <meta name="description" content="LocaAssist vous accompagne de A à Z dans votre recherche de logement : recherche ciblée, dossier optimisé, visites et suivi humain." />
+  <style>
+    :root{
+      --bg:#03050a;
+      --dark:#070a12;
+      --card:rgba(12,15,24,.82);
+      --purple:#8b3dff;
+      --purple2:#b16cff;
+      --text:#ffffff;
+      --muted:#d7d7df;
+      --line:rgba(255,255,255,.14);
+      --soft:#f4f4f6;
+    }
+
+    *{margin:0;padding:0;box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      overflow-x:hidden;
+    }
+
+    a{text-decoration:none;color:inherit}
+    .wrap{width:min(1180px,92%);margin:auto}
+
+    header{
+      position:absolute;
+      top:0;left:0;right:0;
+      z-index:20;
+      padding:26px 0;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-size:31px;
+      font-weight:900;
+      letter-spacing:-1.2px;
+      line-height:1;
+    }
+
+    .brand small{
+      display:block;
+      font-size:13px;
+      font-weight:500;
+      letter-spacing:0;
+      color:#fff;
+      opacity:.95;
+      margin-top:6px;
+    }
+
+    .brand span span{color:var(--purple2)}
+    .logo-icon{
+      width:39px;height:39px;
+      display:grid;place-items:center;
+    }
+
+    .logo-icon svg{
+      width:39px;height:39px;
+      filter:drop-shadow(0 0 14px rgba(139,61,255,.35));
+    }
+
+    .links{
+      display:flex;
+      align-items:center;
+      gap:34px;
+      font-size:15px;
+      font-weight:700;
+    }
+
+    .links a{
+      color:#fff;
+      opacity:.95;
+      padding:8px 0;
+      position:relative;
+    }
+
+    .links a.active:after{
+      content:"";
+      position:absolute;
+      left:0;right:0;bottom:-10px;
+      height:3px;
+      border-radius:99px;
+      background:var(--purple);
+      box-shadow:0 0 18px rgba(139,61,255,.75);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:11px;
+      border-radius:13px;
+      padding:17px 26px;
+      background:linear-gradient(135deg,#7b2fff,#9e5cff);
+      color:white;
+      font-weight:850;
+      border:0;
+      box-shadow:0 18px 45px rgba(139,61,255,.34);
+      transition:.22s ease;
+      cursor:pointer;
+    }
+
+    .btn:hover{transform:translateY(-2px);box-shadow:0 22px 55px rgba(139,61,255,.45)}
+    .btn svg{width:23px;height:23px}
+
+    .hero{
+      min-height:870px;
+      padding-top:118px;
+      position:relative;
+      overflow:hidden;
+      background:
+        linear-gradient(90deg,rgba(0,0,0,.98) 0%,rgba(0,0,0,.88) 34%,rgba(0,0,0,.22) 62%,rgba(0,0,0,.28) 100%),
+        linear-gradient(180deg,rgba(0,0,0,.28),rgba(0,0,0,.1)),
+        url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=1800&auto=format&fit=crop") center/cover no-repeat;
+    }
+
+    .hero:after{
+      content:"";
+      position:absolute;
+      inset:auto 0 0 0;
+      height:120px;
+      background:linear-gradient(180deg,transparent,#05070d);
+    }
+
+    .hero-grid{
+      position:relative;
+      z-index:2;
+      display:grid;
+      grid-template-columns:1fr 380px;
+      gap:48px;
+      align-items:center;
+      padding-top:72px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:11px 18px;
+      border:1px solid rgba(255,255,255,.28);
+      border-radius:999px;
+      font-size:14px;
+      font-weight:750;
+      background:rgba(5,7,13,.58);
+      backdrop-filter:blur(16px);
+      margin-bottom:27px;
+      color:white;
+    }
+
+    .pill i{
+      width:10px;height:10px;
+      border-radius:50%;
+      background:var(--purple);
+      box-shadow:0 0 18px rgba(139,61,255,.9);
+    }
+
+    h1{
+      font-size:clamp(50px,6.6vw,76px);
+      line-height:1.03;
+      letter-spacing:-3px;
+      margin-bottom:28px;
+      font-weight:950;
+      max-width:650px;
+    }
+
+    h1 .purple{
+      display:inline-block;
+      color:var(--purple2);
+      position:relative;
+      text-shadow:0 0 22px rgba(139,61,255,.32);
+    }
+
+    h1 .purple:after{
+      content:"";
+      position:absolute;
+      left:6px;right:8px;bottom:-13px;
+      height:5px;
+      background:var(--purple);
+      border-radius:999px;
+      transform:skewX(-18deg);
+      box-shadow:0 0 18px rgba(139,61,255,.75);
+    }
+
+    .lead{
+      font-size:21px;
+      line-height:1.55;
+      color:white;
+      max-width:560px;
+      margin:44px 0 34px;
+      font-weight:500;
+    }
+
+    .hero-features{
+      display:flex;
+      align-items:center;
+      gap:34px;
+      flex-wrap:wrap;
+      margin-top:37px;
+    }
+
+    .mini-feature{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      color:white;
+      font-size:15px;
+      line-height:1.35;
+    }
+
+    .mini-feature svg{
+      width:34px;height:34px;
+      color:var(--purple2);
+      filter:drop-shadow(0 0 12px rgba(139,61,255,.35));
+      flex:0 0 auto;
+    }
+
+    .service-card{
+      background:rgba(9,11,18,.82);
+      border:1px solid rgba(255,255,255,.22);
+      border-radius:28px;
+      padding:32px 28px;
+      backdrop-filter:blur(18px);
+      box-shadow:0 28px 75px rgba(0,0,0,.55);
+    }
+
+    .service-card h2{
+      font-size:30px;
+      line-height:1.25;
+      margin-bottom:26px;
+      letter-spacing:-.5px;
+    }
+
+    .service-card h2 span{color:var(--purple2)}
+
+    .service-row{
+      display:grid;
+      grid-template-columns:48px 1fr;
+      gap:16px;
+      align-items:center;
+      padding:17px 0;
+      border-bottom:1px solid rgba(255,255,255,.11);
+    }
+
+    .service-row:last-of-type{border-bottom:0}
+
+    .circle-icon{
+      width:48px;height:48px;
+      border-radius:50%;
+      display:grid;place-items:center;
+      background:rgba(139,61,255,.18);
+      color:var(--purple2);
+    }
+
+    .circle-icon svg{width:27px;height:27px}
+    .service-row p{font-size:16px;line-height:1.45;color:white}
+
+    .highlight{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns:48px 1fr;
+      gap:16px;
+      align-items:center;
+      padding:18px;
+      border-radius:14px;
+      background:linear-gradient(135deg,rgba(139,61,255,.55),rgba(139,61,255,.22));
+      border:1px solid rgba(255,255,255,.1);
+    }
+
+    .section-white{
+      background:#f6f6f7;
+      color:#070a12;
+      padding:36px 0 62px;
+      position:relative;
+      z-index:3;
+    }
+
+    .center-title{
+      text-align:center;
+      font-size:35px;
+      line-height:1.2;
+      letter-spacing:-1px;
+      margin-bottom:50px;
+      font-weight:950;
+    }
+
+    .center-title span{color:var(--purple)}
+    .under-line{
+      width:48px;height:3px;
+      background:var(--purple);
+      border-radius:999px;
+      margin:12px auto 0;
+    }
+
+    .why-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:0;
+      max-width:1040px;
+      margin:auto;
+    }
+
+    .why-card{
+      text-align:center;
+      padding:0 28px;
+      border-right:1px solid #dddde3;
+    }
+
+    .why-card:last-child{border-right:0}
+
+    .why-card svg{
+      width:66px;height:66px;
+      color:#6d2bdc;
+      margin-bottom:22px;
+      stroke-width:1.8;
+    }
+
+    .why-card h3{
+      font-size:17px;
+      margin-bottom:14px;
+      font-weight:900;
+    }
+
+    .why-card p{
+      color:#10131a;
+      line-height:1.55;
+      font-size:15px;
+    }
+
+    .dark-section{
+      background:#03050a;
+      padding:33px 0 50px;
+    }
+
+    .dark-section .center-title{
+      color:#fff;
+      margin-bottom:44px;
+    }
+
+    .steps{
+      display:grid;
+      grid-template-columns:1fr 40px 1fr 40px 1fr 40px 1fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    .step{
+      min-height:230px;
+      background:rgba(255,255,255,.045);
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:17px;
+      padding:24px 24px 22px;
+      text-align:center;
+      position:relative;
+      box-shadow:0 15px 45px rgba(0,0,0,.25);
+    }
+
+    .num{
+      position:absolute;
+      top:16px;left:16px;
+      width:34px;height:34px;
+      border-radius:50%;
+      background:linear-gradient(135deg,#7b2fff,#9d5cff);
+      display:grid;place-items:center;
+      color:white;
+      font-weight:950;
+      box-shadow:0 0 22px rgba(139,61,255,.45);
+    }
+
+    .step svg{
+      width:56px;height:56px;
+      color:var(--purple2);
+      margin:16px 0 22px;
+    }
+
+    .step h3{font-size:17px;margin-bottom:12px}
+    .step p{color:#fff;opacity:.92;line-height:1.45;font-size:15px}
+
+    .arrow{
+      color:#fff;
+      font-size:36px;
+      text-align:center;
+      opacity:.9;
+    }
+
+    .cta-box{
+      margin:34px auto 0;
+      border:1px solid rgba(139,61,255,.9);
+      border-radius:18px;
+      padding:27px 30px;
+      display:grid;
+      grid-template-columns:1fr 110px 1.05fr;
+      gap:30px;
+      align-items:center;
+      box-shadow:0 0 30px rgba(139,61,255,.08);
+    }
+
+    .cta-box h2{
+      font-size:35px;
+      line-height:1.15;
+      margin-bottom:14px;
+      letter-spacing:-.8px;
+    }
+
+    .cta-box h2 span{color:var(--purple2)}
+    .cta-box p{font-size:17px;line-height:1.55;color:white;opacity:.92}
+
+    .curved{
+      font-size:75px;
+      color:var(--purple);
+      line-height:1;
+      text-align:center;
+    }
+
+    .phone-box{
+      border:1px solid rgba(139,61,255,.95);
+      border-radius:16px;
+      padding:17px 25px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:18px;
+      color:white;
+    }
+
+    .phone-box svg{width:54px;height:54px}
+    .phone-number{font-size:38px;font-weight:950;letter-spacing:-1px}
+    .phone-sub{font-size:14px;color:#fff;opacity:.9;text-align:center;margin-top:2px}
+
+    .trust-row{
+      display:flex;
+      justify-content:space-around;
+      gap:16px;
+      margin-top:20px;
+      color:white;
+      font-size:14px;
+    }
+
+    .trust-row div{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      opacity:.92;
+    }
+
+    .trust-row svg{width:25px;height:25px;color:var(--purple2)}
+
+    footer{
+      background:#03050a;
+      border-top:1px solid rgba(255,255,255,.05);
+      padding:22px 0;
+    }
+
+    .footer-inner{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+      color:white;
+      opacity:.92;
+      font-size:14px;
+    }
+
+    .footer-brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:24px;
+      font-weight:950;
+    }
+
+    .footer-brand span span{color:var(--purple2)}
+    .footer-links{display:flex;gap:44px;color:#d3d3da}
+
+    @media(max-width:1050px){
+      .links{display:none}
+      .hero{min-height:auto;padding-bottom:70px}
+      .hero-grid{grid-template-columns:1fr;gap:38px}
+      .service-card{max-width:560px}
+      .why-grid{grid-template-columns:repeat(2,1fr);gap:35px}
+      .why-card{border-right:0}
+      .steps{grid-template-columns:1fr;gap:18px}
+      .arrow{display:none}
+      .cta-box{grid-template-columns:1fr}
+      .curved{display:none}
+    }
+
+    @media(max-width:640px){
+      header{position:relative;background:#03050a;padding:18px 0}
+      .nav{gap:14px}
+      .brand{font-size:24px}
+      .brand small{display:none}
+      .btn{padding:13px 16px;font-size:14px}
+      .hero{padding-top:28px;background-position:center}
+      .hero-grid{padding-top:10px}
+      h1{font-size:43px;letter-spacing:-1.7px}
+      .lead{font-size:18px;margin-top:34px}
+      .hero-features{gap:18px}
+      .service-card{padding:24px 20px;border-radius:22px}
+      .service-card h2{font-size:25px}
+      .why-grid{grid-template-columns:1fr}
+      .why-card{padding:18px 20px}
+      .center-title{font-size:28px}
+      .cta-box{padding:22px 18px}
+      .phone-box{flex-direction:column}
+      .phone-number{font-size:31px}
+      .trust-row{flex-direction:column;align-items:flex-start}
+      .footer-inner{flex-direction:column;align-items:flex-start}
+      .footer-links{gap:18px;flex-wrap:wrap}
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap nav">
+      <a class="brand" href="#">
+        <span class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M8 23L24 8L40 23" stroke="#9b6cff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 22V40H36V22" stroke="#9b6cff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Loca<span>Assist</span><small>On trouve le logement. Vous emménagez.</small></span>
+      </a>
+
+      <nav class="links">
+        <a class="active" href="#">Accueil</a>
+        <a href="#services">Nos services</a>
+        <a href="#fonctionnement">Comment ça marche</a>
+        <a href="#apropos">À propos</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+
+      <a class="btn" href="https://wa.me/33753729988?text=Bonjour%2C%20je%20veux%20%C3%AAtre%20accompagn%C3%A9%20dans%20ma%20recherche%20de%20logement%20avec%20LocaAssist" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5A8.1 8.1 0 0 1 8.1 18.6L4 20l1.4-4A8.1 8.1 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="2"/><path d="M8.5 8.5c.5 3 2.2 4.8 5 6l1.5-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Nous contacter
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="services">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="pill"><i></i> VOTRE PARTENAIRE LOGEMENT</div>
+
+          <h1>On trouve le logement.<br><span class="purple">Vous emménagez.</span></h1>
+
+          <p class="lead">
+            LocaAssist vous accompagne de A à Z dans votre recherche de logement.
+            Gagnez du temps, évitez le stress, on s’occupe de tout.
+          </p>
+
+          <a class="btn" href="https://wa.me/33753729988?text=Bonjour%2C%20je%20veux%20parler%20%C3%A0%20un%20conseiller%20LocaAssist%20pour%20ma%20recherche%20de%20logement" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5A8.1 8.1 0 0 1 8.1 18.6L4 20l1.4-4A8.1 8.1 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="2"/><path d="M8.5 8.5c.5 3 2.2 4.8 5 6l1.5-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            Parler à un conseiller sur WhatsApp →
+          </a>
+
+          <div class="hero-features">
+            <div class="mini-feature">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Service 100%<br>personnalisé
+            </div>
+            <div class="mini-feature">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 10h12v10H6V10Z" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/><path d="M12 14v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              Confidentialité<br>garantie
+            </div>
+            <div class="mini-feature">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/><path d="M2 21a6 6 0 0 1 12 0" stroke="currentColor" stroke-width="2"/><path d="M17 8a3 3 0 1 1 0 6" stroke="currentColor" stroke-width="2"/><path d="M18 17a5 5 0 0 1 4 4" stroke="currentColor" stroke-width="2"/></svg>
+              Accompagnement<br>humain
+            </div>
+          </div>
+        </div>
+
+        <aside class="service-card">
+          <h2>Un accompagnement complet et <span>sur-mesure</span></h2>
+
+          <div class="service-row">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <p>Recherche ciblée selon vos critères</p>
+          </div>
+
+          <div class="service-row">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><path d="m12 3 2.7 5.5 6 .9-4.3 4.2 1 6-5.4-2.9-5.4 2.9 1-6L3.3 9.4l6-.9L12 3Z" stroke="currentColor" stroke-width="2"/></svg></div>
+            <p>Sélection des meilleures annonces</p>
+          </div>
+
+          <div class="service-row">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v15H5V5Z" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M5 10h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <p>Organisation et gestion des visites</p>
+          </div>
+
+          <div class="service-row">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M4 7h7l2 3h7v9H4V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></div>
+            <p>Constitution et optimisation du dossier</p>
+          </div>
+
+          <div class="service-row">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M14 10a4 4 0 1 0-2.7 3.8L5 20h4l5.8-5.8A4 4 0 0 0 14 10Z" stroke="currentColor" stroke-width="2"/><path d="m15 9 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+            <p>Suivi jusqu’à la remise des clés</p>
+          </div>
+
+          <div class="highlight">
+            <div class="circle-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" stroke="currentColor" stroke-width="2"/></svg></div>
+            <p>Un interlocuteur unique du début jusqu’à votre installation</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section-white" id="apropos">
+      <div class="wrap">
+        <h2 class="center-title">Pourquoi choisir <span>LocaAssist</span> ?<div class="under-line"></div></h2>
+
+        <div class="why-grid">
+          <div class="why-card">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor"/><path d="M12 7v6l4 2" stroke="currentColor" stroke-linecap="round"/></svg>
+            <h3>Gain de temps</h3>
+            <p>Fini les heures perdues à chercher. On s’occupe de tout pour vous.</p>
+          </div>
+
+          <div class="why-card">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 2 14.4 5 18.2 4.6 19 8.4 22 10.8 20 14 20.8 17.8 17 18.6 14.6 21.8 12 20 9.4 21.8 7 18.6 3.2 17.8 4 14 2 10.8 5 8.4 5.8 4.6 9.6 5 12 2Z" stroke="currentColor"/><path d="m8.8 12 2.1 2.1 4.4-4.5" stroke="currentColor" stroke-linecap="round"/></svg>
+            <h3>Accès prioritaire</h3>
+            <p>Nous avons accès à des biens non publiés ou réservés en avant-première.</p>
+          </div>
+
+          <div class="why-card">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z" stroke="currentColor"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-linecap="round"/></svg>
+            <h3>Dossier solide</h3>
+            <p>Un dossier optimisé pour maximiser vos chances d’être choisi.</p>
+          </div>
+
+          <div class="why-card">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M8 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor"/><path d="M2 21a6 6 0 0 1 12 0" stroke="currentColor"/><path d="M17 8a3 3 0 1 1 0 6" stroke="currentColor"/><path d="M18 17a5 5 0 0 1 4 4" stroke="currentColor"/></svg>
+            <h3>Accompagnement humain</h3>
+            <p>Un interlocuteur dédié, à l’écoute, du début jusqu’à votre installation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="dark-section" id="fonctionnement">
+      <div class="wrap">
+        <h2 class="center-title">Comment <span>ça marche</span> ?<div class="under-line"></div></h2>
+
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M4 5h16v10H7l-3 3V5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+            <h3>Premier échange</h3>
+            <p>Vous nous contactez et nous définissons ensemble vos besoins.</p>
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="step">
+            <div class="num">2</div>
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/><path d="m16 16 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <h3>Recherche ciblée</h3>
+            <p>Nous lançons la recherche et sélectionnons les meilleurs logements pour vous.</p>
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 5h14v15H5V5Z" stroke="currentColor" stroke-width="2"/><path d="M8 3v4M16 3v4M5 10h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <h3>Visites organisées</h3>
+            <p>Nous organisons et accompagnons les visites si besoin.</p>
+          </div>
+
+          <div class="arrow">→</div>
+
+          <div class="step">
+            <div class="num">4</div>
+            <svg viewBox="0 0 24 24" fill="none"><path d="M14 10a4 4 0 1 0-2.7 3.8L5 20h4l5.8-5.8A4 4 0 0 0 14 10Z" stroke="currentColor" stroke-width="2"/><path d="m15 9 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <h3>Dossier & remise des clés</h3>
+            <p>Nous montons votre dossier et restons à vos côtés jusqu’à la remise des clés.</p>
+          </div>
+        </div>
+
+        <div class="cta-box" id="faq">
+          <div>
+            <h2>Prêt à trouver votre <span>futur chez-vous ?</span></h2>
+            <p>Écrivez-nous dès maintenant sur WhatsApp et parlons de votre projet.</p>
+          </div>
+
+          <div class="curved">↝</div>
+
+          <div>
+            <a class="phone-box" href="https://wa.me/33753729988?text=Bonjour%2C%20je%20veux%20trouver%20mon%20futur%20logement%20avec%20LocaAssist" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M20 11.5A8.1 8.1 0 0 1 8.1 18.6L4 20l1.4-4A8.1 8.1 0 1 1 20 11.5Z" stroke="currentColor" stroke-width="2"/><path d="M8.5 8.5c.5 3 2.2 4.8 5 6l1.5-1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              <span>
+                <span class="phone-number">07 53 72 99 88</span>
+                <span class="phone-sub">Réponse rapide et personnalisée</span>
+              </span>
+            </a>
+
+            <div class="trust-row">
+              <div><svg viewBox="0 0 24 24" fill="none"><path d="M6 10h12v10H6V10Z" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/></svg>Confidentialité garantie</div>
+              <div><svg viewBox="0 0 24 24" fill="none"><path d="M12 3 19 6v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/><path d="m9 12 2 2 4-5" stroke="currentColor" stroke-width="2"/></svg>Service fiable et transparent</div>
+              <div><svg viewBox="0 0 24 24" fill="none"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" stroke="currentColor" stroke-width="2"/></svg>Satisfaction client prioritaire</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+<section style="background:#f6f6f7;padding:70px 0;">
+  <div style="width:min(1180px,92%);margin:auto;">
+    <h2 style="text-align:center;font-size:42px;font-weight:900;color:#070a12;margin-bottom:14px;">
+      Nos <span style="color:#8b3dff;">offres</span>
+    </h2>
+    <div style="width:48px;height:3px;background:#8b3dff;border-radius:999px;margin:0 auto 50px;"></div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;">
+
+      <div style="background:white;border-radius:24px;padding:34px;border:1px solid #e6e6ea;">
+        <h3 style="font-size:28px;color:#070a12;margin-bottom:16px;">Starter</h3>
+        <div style="font-size:52px;font-weight:900;color:#8b3dff;margin-bottom:20px;">49€</div>
+        <p style="color:#333;line-height:1.6;margin-bottom:24px;">
+          Idéal pour préparer un dossier solide et démarrer rapidement.
+        </p>
+
+        <ul style="color:#222;line-height:2;">
+          <li>Analyse du profil</li>
+          <li>Aide dossier locatif</li>
+          <li>Conseils personnalisés</li>
+        </ul>
+
+        <a href="https://wa.me/33753729988" style="display:block;text-align:center;margin-top:28px;padding:16px;border-radius:14px;background:#8b3dff;color:white;font-weight:800;text-decoration:none;">
+          Commencer
+        </a>
+      </div>
+
+      <div style="background:#0b0d14;color:white;border-radius:24px;padding:34px;border:2px solid #8b3dff;box-shadow:0 20px 60px rgba(139,61,255,.25);position:relative;">
+        <div style="position:absolute;top:18px;right:18px;background:#8b3dff;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:800;">
+          Le plus demandé
+        </div>
+
+        <h3 style="font-size:28px;margin-bottom:16px;">Premium</h3>
+        <div style="font-size:52px;font-weight:900;color:#b16cff;margin-bottom:20px;">199€</div>
+
+        <p style="line-height:1.6;margin-bottom:24px;color:#ddd;">
+          Accompagnement complet de la recherche jusqu’au suivi.
+        </p>
+
+        <ul style="line-height:2;color:#f2f2f2;">
+          <li>Recherche ciblée</li>
+          <li>Contact propriétaires</li>
+          <li>Organisation des visites</li>
+          <li>Suivi personnalisé</li>
+        </ul>
+
+        <a href="https://wa.me/33753729988" style="display:block;text-align:center;margin-top:28px;padding:16px;border-radius:14px;background:linear-gradient(135deg,#7b2fff,#9e5cff);color:white;font-weight:800;text-decoration:none;">
+          Réserver
+        </a>
+      </div>
+
+      <div style="background:white;border-radius:24px;padding:34px;border:1px solid #e6e6ea;">
+        <h3 style="font-size:28px;color:#070a12;margin-bottom:16px;">VIP</h3>
+        <div style="font-size:52px;font-weight:900;color:#8b3dff;margin-bottom:20px;">299€</div>
+
+        <p style="color:#333;line-height:1.6;margin-bottom:24px;">
+          Pour les personnes occupées ou à distance.
+        </p>
+
+        <ul style="color:#222;line-height:2;">
+          <li>Accompagnement complet</li>
+          <li>Pré-visites possibles</li>
+          <li>Photos & vidéos</li>
+          <li>Retour détaillé</li>
+        </ul>
+
+        <a href="https://wa.me/33753729988" style="display:block;text-align:center;margin-top:28px;padding:16px;border-radius:14px;background:#8b3dff;color:white;font-weight:800;text-decoration:none;">
+          Nous contacter
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+</main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">
+          <svg viewBox="0 0 48 48" fill="none">
+            <path d="M8 23L24 8L40 23" stroke="#9b6cff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 22V40H36V22" stroke="#9b6cff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+        <span>Loca<span>Assist</span></span>
+      </div>
+
+      <div class="footer-links">
+        <span>Mentions légales</span>
+        <span>Politique de confidentialité</span>
+        <span>FAQ</span>
+      </div>
+
+      <div>© 2024 LocaAssist — Tous droits réservés</div>
+    </div>
+  </footer>
+</body>
+</html>
